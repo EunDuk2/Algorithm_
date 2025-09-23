@@ -10,21 +10,16 @@ public class Main {
         int n = Integer.parseInt(input[0]);
         int m = Integer.parseInt(input[1]);
 
-        HashMap<String, Integer> map = new HashMap();
+        int total = 0;
+        Set<String> set = new HashSet();
 
         for(int i = 0 ; i < n ; i++) {
-            map.put(br.readLine(), 0);
+            set.add(br.readLine());
         }
         for(int i = 0 ; i < m ; i++) {
-            String a = br.readLine();
-            if(map.get(a) != null) {
-                map.put(a, map.get(a)+1);
+            if(set.contains(br.readLine())) {
+                total += 1;
             }
-        }
-        int total = 0;
-
-        for(int a : map.values()) {
-            total += a;
         }
         System.out.println(total);
     }

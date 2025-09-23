@@ -1,3 +1,4 @@
+import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -9,22 +10,22 @@ public class Main {
         int n = Integer.parseInt(input[0]);
         int m = Integer.parseInt(input[1]);
 
-        String[] s = new String[n];
-        int total = 0;
+        HashMap<String, Integer> map = new HashMap();
 
         for(int i = 0 ; i < n ; i++) {
-            s[i] = br.readLine();
+            map.put(br.readLine(), 0);
         }
-
         for(int i = 0 ; i < m ; i++) {
             String a = br.readLine();
-            for(int j = 0; j < n ; j++) {
-                if(s[j].equals(a)) {
-                    total++;
-                }
+            if(map.get(a) != null) {
+                map.put(a, map.get(a)+1);
             }
         }
+        int total = 0;
 
+        for(int a : map.values()) {
+            total += a;
+        }
         System.out.println(total);
     }
 }

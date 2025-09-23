@@ -4,14 +4,27 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
+        String[] input = br.readLine().split(" ");
+
+        int n = Integer.parseInt(input[0]);
+        int m = Integer.parseInt(input[1]);
+
+        String[] s = new String[n];
+        int total = 0;
 
         for(int i = 0 ; i < n ; i++) {
-            String stars = "";
-            for(int j = 0 ; j < i+1 ; j++) {
-                stars += "*";
-            }
-            System.out.println(stars);
+            s[i] = br.readLine();
         }
+
+        for(int i = 0 ; i < m ; i++) {
+            String a = br.readLine();
+            for(int j = 0; j < n ; j++) {
+                if(s[j].equals(a)) {
+                    total++;
+                }
+            }
+        }
+
+        System.out.println(total);
     }
 }

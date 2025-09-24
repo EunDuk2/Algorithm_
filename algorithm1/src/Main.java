@@ -5,35 +5,35 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
+        String[] input = br.readLine().split(" ");
 
-        Deque<Integer> deque = new ArrayDeque();
-        StringBuilder sb = new StringBuilder();
+        int N = Integer.parseInt(input[0]);
+        int M = Integer.parseInt(input[1]);
 
+        // 1
+        Map<String, Integer> map = new HashMap<>();
         for(int i = 0 ; i < N ; i++) {
-            String[] input = br.readLine().split(" ");
-
-            int order = Integer.parseInt(input[0]);
-
-            if(order == 1) {
-                int num = Integer.parseInt(input[1]);
-                deque.addFirst(num);
-            } else if(order == 2) {
-                int num = Integer.parseInt(input[1]);
-                deque.addLast(num);
-            } else if(order == 3) {
-                sb.append(deque.isEmpty() ? -1 : deque.pollFirst()).append("\n");
-            } else if(order == 4) {
-                sb.append(deque.isEmpty() ? -1 : deque.pollLast()).append("\n");
-            } else if(order == 5) {
-                sb.append(deque.size()).append("\n");
-            } else if(order == 6) {
-                sb.append(deque.isEmpty() ? 1 : 0).append("\n");
-            } else if(order == 7) {
-                sb.append(deque.isEmpty() ? -1 : deque.peekFirst()).append("\n");
-            } else {
-                sb.append(deque.isEmpty() ? -1 : deque.peekLast()).append("\n");
+            String key = br.readLine();
+            if(key.length() >= M) {
+                map.put(key, map.getOrDefault(key, 0)+1);
             }
+        }
+
+        // 2
+        List<String> list = new ArrayList(map.keySet());
+        list.sort((a, b) -> {
+            int compare1 = map.get(b) - map.get(a);
+            if(compare1 != 0) return compare1;
+
+            int compare2 = b.length() - a.length();
+            if(compare2 != 0) return compare2;
+
+            return a.compareTo(b);
+        });
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < list.size() ; i++) {
+            sb.append(list.get(i)).append("\n");
         }
         System.out.println(sb);
     }

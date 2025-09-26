@@ -2,41 +2,37 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static List<List<Integer>> doubleList = new ArrayList();
-    static List<Integer> temp = new ArrayList();
-    static int N;
-    static int M;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
+        int N = Integer.parseInt(br.readLine());
+        String[] aStr = br.readLine().split(" ");
+        int X = Integer.parseInt(br.readLine());
 
-        N = Integer.parseInt(NM[0]);
-        M = Integer.parseInt(NM[1]);
+        List<Integer> list = new ArrayList();
+        for(String s : aStr) {
+            list.add(Integer.parseInt(s));
+        }
+        list.sort(Comparator.naturalOrder());
 
-        // 1
-        dfs(1);
+        int result = 0;
 
-        // 2
-        StringBuilder sb = new StringBuilder();
-        for(List<Integer> list : doubleList) {
-            for(int i = 0 ; i < list.size() ; i++) {
-                sb.append(list.get(i)).append(" ");
+        int a = 0;
+        int b = list.size()-1;
+        while(a < b) {
+            int sum = list.get(a) + list.get(b);
+
+            if(sum < X) {
+                a += 1;
+            } else if(sum > X) {
+                b -= 1;
+            } else {
+                result += 1;
+                a += 1;
+                b = list.size()-1;
             }
-            sb.append("\n");
         }
-        System.out.println(sb);
-    }
-    static void dfs(int start) {
-        if(temp.size() == M) {
-            doubleList.add(new ArrayList(temp));
-            return;
-        }
-        for(int i = start ; i <= N ; i++) {
-            temp.add(i);
-            dfs(i+1);
-            temp.remove(temp.size()-1);
-        }
+
+        System.out.println(result);
     }
 }

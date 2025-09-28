@@ -6,33 +6,30 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        String[] aStr = br.readLine().split(" ");
-        int X = Integer.parseInt(br.readLine());
 
-        List<Integer> list = new ArrayList();
-        for(String s : aStr) {
-            list.add(Integer.parseInt(s));
-        }
-        list.sort(Comparator.naturalOrder());
+        // 1
+        Queue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            int compare = Math.abs(a) - Math.abs(b);
+            if(compare != 0) return compare;
+            return a - b;
+        });
 
-        int result = 0;
+        // 2
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < N ; i++) {
+            int x = Integer.parseInt(br.readLine());
 
-        int a = 0;
-        int b = list.size()-1;
-        while(a < b) {
-            int sum = list.get(a) + list.get(b);
-
-            if(sum < X) {
-                a += 1;
-            } else if(sum > X) {
-                b -= 1;
+            if(x == 0) {
+                if(pq.isEmpty()) {
+                    sb.append(0).append("\n");
+                } else {
+                    sb.append(pq.poll()).append("\n");
+                }
             } else {
-                result += 1;
-                a += 1;
-                b = list.size()-1;
+                pq.add(x);
             }
         }
-
-        System.out.println(result);
+        
+        System.out.println(sb);
     }
 }

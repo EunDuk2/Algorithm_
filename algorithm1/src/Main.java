@@ -11,9 +11,9 @@ public class Main {
         int M = Integer.parseInt(NM[1]);
 
         // 1
-        Deque<Integer> dq = new ArrayDeque<>();
+        LinkedList<Integer> q = new LinkedList<>();
         for(int i = 1 ; i <= N ; i++) {
-            dq.addLast(i);
+            q.add(i);
         }
         String[] aArr = br.readLine().split(" ");
 
@@ -22,33 +22,21 @@ public class Main {
         for(int i = 0 ; i < M ; i++) {
             int a = Integer.parseInt(aArr[i]);
 
-            int count1 = 0;
-            Deque<Integer> dq1 = new ArrayDeque<>(dq);
-            int count2 = 0;
-            Deque<Integer> dq2 = new ArrayDeque<>(dq);
-
-            // 2번
-            while(dq1.peekFirst() != a) {
-                dq1.addFirst(dq1.pollLast());
-                count1++;
-            }
-            // 3번
-            while(dq2.peekFirst() != a) {
-                dq2.addLast(dq2.pollFirst());
-                count2++;
-            }
-
-            if(count1 < count2) {
-                dq = dq1;
-                dq.pollFirst();
-                min += count1;
+            if(q.indexOf(a) <= q.size() / 2) {
+                // 2번
+                while(q.peekFirst() != a) {
+                    q.addLast(q.removeFirst());
+                    min++;
+                }
             } else {
-                dq = dq2;
-                dq.pollFirst();
-                min += count2;
+                // 3번
+                while(q.peekFirst() != a) {
+                    q.addFirst(q.removeLast());
+                    min++;
+                }
             }
+            q.pollFirst();
         }
-
         System.out.println(min);
     }
 }

@@ -2,64 +2,56 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int N, M, R;
+    static int n, a, b, m;
     static List<List<Integer>> doubleList = new ArrayList();
     static boolean[] visited;
-    static int[] order;
-    static int cnt = 1;
+    static int[] dist;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] NMR = br.readLine().split(" ");
 
-        int N = Integer.parseInt(NMR[0]);
-        int M = Integer.parseInt(NMR[1]);
-        int R = Integer.parseInt(NMR[2]);
+        n = Integer.parseInt(br.readLine());
+        String[] ab = br.readLine().split(" ");
+        a = Integer.parseInt(ab[0]);
+        b = Integer.parseInt(ab[1]);
+        m = Integer.parseInt(br.readLine());
 
-        visited = new boolean[N+1];
-        order = new int[N+1];
+        visited = new boolean[n+1];
+        dist = new int[n+1];
 
-        for(int i = 0 ; i < N+1 ; i++) {
+        for(int i = 0 ; i < n+1 ; i++) {
             doubleList.add(new ArrayList());
         }
+        for(int i = 0 ; i < m ; i++) {
+            String[] xy = br.readLine().split(" ");
+            int x = Integer.parseInt(xy[0]);
+            int y = Integer.parseInt(xy[1]);
 
-        for(int i = 0 ; i < M ; i++) {
-            String[] uv = br.readLine().split(" ");
-            int u = Integer.parseInt(uv[0]);
-            int v = Integer.parseInt(uv[1]);
-
-            doubleList.get(u).add(v);
-            doubleList.get(v).add(u);
+            doubleList.get(x).add(y);
+            doubleList.get(y).add(x);
         }
 
-        for(int i = 0 ; i < doubleList.size() ; i++) {
-            Collections.sort(doubleList.get(i));
-        }
-
-        bfs(R);
-
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1 ; i < order.length ; i++) {
-            sb.append(order[i]).append("\n");
-        }
-
-        System.out.println(sb);
+        bfs(a);
     }
     static void bfs(int start) {
         Queue<Integer> q = new LinkedList();
         q.add(start);
         visited[start] = true;
-        order[start] = cnt++;
 
         while(!q.isEmpty()) {
-            int target = q.poll();
-            for(int next : doubleList.get(target)) {
+            int curret = q.poll();
+            for(int next : doubleList.get(curret)) {
                 if(!visited[next]) {
                     q.add(next);
                     visited[next] = true;
-                    order[next] = cnt++;
+                    dist[next] = dist[curret] + 1; // trouble
                 }
             }
+        }
+        if(dist[b] == 0) {
+            System.out.println(-1);
+        } else {
+            System.out.println(dist[b]);
         }
     }
 }

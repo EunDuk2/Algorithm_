@@ -2,56 +2,37 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int n, a, b, m;
+    static List<Integer> list = new ArrayList();
     static List<List<Integer>> doubleList = new ArrayList();
-    static boolean[] visited;
-    static int[] dist;
+    static int N, M;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(br.readLine());
-        String[] ab = br.readLine().split(" ");
-        a = Integer.parseInt(ab[0]);
-        b = Integer.parseInt(ab[1]);
-        m = Integer.parseInt(br.readLine());
+        String[] NM = br.readLine().split(" ");
+        N = Integer.parseInt(NM[0]);
+        M = Integer.parseInt(NM[1]);
 
-        visited = new boolean[n+1];
-        dist = new int[n+1];
+        dfs(1);
 
-        for(int i = 0 ; i < n+1 ; i++) {
-            doubleList.add(new ArrayList());
-        }
-        for(int i = 0 ; i < m ; i++) {
-            String[] xy = br.readLine().split(" ");
-            int x = Integer.parseInt(xy[0]);
-            int y = Integer.parseInt(xy[1]);
-
-            doubleList.get(x).add(y);
-            doubleList.get(y).add(x);
-        }
-
-        bfs(a);
-    }
-    static void bfs(int start) {
-        Queue<Integer> q = new LinkedList();
-        q.add(start);
-        visited[start] = true;
-
-        while(!q.isEmpty()) {
-            int curret = q.poll();
-            for(int next : doubleList.get(curret)) {
-                if(!visited[next]) {
-                    q.add(next);
-                    visited[next] = true;
-                    dist[next] = dist[curret] + 1; // trouble
-                }
+        StringBuilder sb = new StringBuilder();
+        for(List<Integer> list : doubleList) {
+            for(int num : list) {
+                sb.append(num).append(" ");
             }
+            sb.append("\n");
         }
-        if(dist[b] == 0) {
-            System.out.println(-1);
-        } else {
-            System.out.println(dist[b]);
+        System.out.println(sb);
+    }
+    static void dfs(int start) {
+        if(list.size() == M) {
+            doubleList.add(new ArrayList(list));
+            return;
+        }
+        for(int i = start ; i <= N ; i++) {
+            list.add(i);
+            dfs(i);
+            list.remove(list.size()-1);
         }
     }
 }

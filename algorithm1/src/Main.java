@@ -1,85 +1,25 @@
-import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int N, M, V;
-    static List<List<Integer>> doubleList = new ArrayList();
-    static boolean[] visited;
-    static List<Integer> order = new ArrayList();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        long[][] dp = new long[N + 1][10];
 
-        String[] NMV = br.readLine().split(" ");
+        for (int i = 1; i <= 9; i++) dp[1][i] = 1;
 
-        N = Integer.parseInt(NMV[0]);
-        M = Integer.parseInt(NMV[1]);
-        V = Integer.parseInt(NMV[2]);
-
-        for(int i = 0 ; i < N+1 ; i++) {
-            doubleList.add(new ArrayList());
-        }
-
-        visited = new boolean[N+1];
-
-        for(int i = 0 ; i < M ; i++) {
-            String[] xy = br.readLine().split(" ");
-            int x = Integer.parseInt(xy[0]);
-            int y = Integer.parseInt(xy[1]);
-
-            doubleList.get(x).add(y);
-            doubleList.get(y).add(x);
-        }
-
-        for(List<Integer> list : doubleList) {
-            Collections.sort(list);
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        // 1
-        dfs(V);
-        for(int a : order) {
-            sb.append(a).append(" ");
-        }
-        sb.append("\n");
-
-        // 초기화
-        visited = new boolean[N+1];
-        order.clear();
-
-        // 2
-        bfs(V);
-        for(int a : order) {
-            sb.append(a).append(" ");
-        }
-
-        System.out.println(sb);
-    }
-    static void dfs(int start) {
-        if(!visited[start]) {
-            visited[start] = true;
-            order.add(start);
-            for(int next : doubleList.get(start)) {
-                dfs(next);
+        for (int i = 2; i <= N; i++) {
+            for (int j = 0; j <= 9; j++) {
+                if (j > 0) dp[i][j] += dp[i - 1][j - 1];
+                if (j < 9) dp[i][j] += dp[i - 1][j + 1];
+                dp[i][j] %= 1000000000;
             }
         }
-    }
 
-    static void bfs(int start) {
-        Queue<Integer> q = new LinkedList();
-        q.add(start);
-        visited[start] = true;
-        order.add(start);
-        while(!q.isEmpty()) {
-            int current = q.poll();
-            for(int next : doubleList.get(current)) {
-                if(!visited[next]) {
-                    q.add(next);
-                    visited[next] = true;
-                    order.add(next);
-                }
-            }
+        long sum = 0;
+        for (int j = 0; j <= 9; j++) {
+            sum += dp[N][j];
         }
+        System.out.println(sum % 1000000000);
     }
 }

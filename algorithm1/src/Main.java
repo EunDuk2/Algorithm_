@@ -2,59 +2,51 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
+    static int I;
     static int[][] graph;
     static boolean[][] visited;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-    static int result = 1;
-    static int cnt = 0;
+    static int[] dx = {-2, -1, 1, 2, -2, -1, 1, 2};
+    static int[] dy = {-1, -2, -2, -1, 1, 2, 2, 1};
+    static int[][] dist;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        N = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
 
-        graph = new int[N][N];
-        visited = new boolean[N][N];
+        for(int t = 0; t < T ; t++) {
+            I = Integer.parseInt(br.readLine());
+            graph = new int[I][I];
+            visited = new boolean[I][I];
+            dist = new int[I][I];
 
-        int maxHeight = 1;
-        for(int i = 0 ; i < N ; i++) {
-            String[] line = br.readLine().split(" ");
-            for(int j = 0 ; j < N ; j++) {
-                int num = Integer.parseInt(line[j]);
-                graph[i][j] = num;
-                if(graph[i][j] > maxHeight) maxHeight = graph[i][j];
-            }
+            String[] currentXY = br.readLine().split(" ");
+            int currentX = Integer.parseInt(currentXY[0]);
+            int currentY = Integer.parseInt(currentXY[1]);
+
+            String[] targetXY = br.readLine().split(" ");
+            int targetX = Integer.parseInt(targetXY[0]);
+            int targetY = Integer.parseInt(targetXY[1]);
+
+            bfs(currentX, currentY, new int[]{targetX, targetY});
+
+            System.out.println(dist[targetX][targetY]);
         }
-
-        for(int h = 1 ; h <= maxHeight ; h++) {
-            for(int x = 0 ; x < N ; x++) {
-                for(int y = 0 ; y < N ; y++) {
-                    if(graph[x][y] > h && !visited[x][y]) {
-                        bfs(x, y, h);
-                    }
-                }
-            }
-            visited = new boolean[N][N];
-            result = Math.max(result, cnt);
-            cnt = 0;
-        }
-        System.out.println(result);
     }
-    static void bfs(int x, int y, int h) {
+    static void bfs(int x, int y, int[] target) {
         Queue<int[]> q = new LinkedList();
         q.add(new int[]{x, y});
         visited[x][y] = true;
-        cnt++;
+        dist[x][y] = 0;
         while(!q.isEmpty()) {
-            int[] current = q.poll();
-            for(int i = 0 ; i < 4 ; i++) {
-                int curX = current[0] + dx[i];
-                int curY = current[1] + dy[i];
-                if(curX >= 0 && curX < N && curY >= 0 && curY < N && graph[curX][curY] > h && !visited[curX][curY]) {
-                    q.add(new int[]{curX, curY});
-                    visited[curX][curY] = true;
+            int[] currentXY = q.poll();
+            for(int i = 0 ; i < 8 ; i++) {
+                int currentX = currentXY[0] + dx[i];
+                int currentY = currentXY[1] + dy[i];
+                if(currentX >= 0 && currentX < I && currentY >= 0 && currentY < I && !visited[currentX][currentY]) {
+                    q.add(new int[]{currentX, currentY});
+                    visited[currentX][currentY] = true;
+                    dist[currentX][currentY] = dist[currentXY[0]][currentXY[1]] + 1;
                 }
             }
         }

@@ -1,25 +1,18 @@
 import java.util.*;
 
-// 프로그래머스 - 조이스틱
 class Solution {
-    public int solution(String name) {
-        int answer = 0;
+    public int[] solution(int[] numbers) {
+        int[] answer = new int[numbers.length];
+        Arrays.fill(answer, -1);
 
-        for (char c : name.toCharArray()) {
-            answer += Math.min(c - 'A', 'Z' - c + 1);
-        }
+        Stack<Integer> stack = new Stack<>();
 
-        int move = name.length() - 1;
-        for (int i = 0; i < name.length(); i++) {
-            int next = i + 1;
-            while (next < name.length() && name.charAt(next) == 'A') {
-                next++;
+        for(int i = 0 ; i < numbers.length ; i++) {
+            while(!stack.isEmpty() && numbers[stack.peek()] < numbers[i]) {
+                answer[stack.pop()] = numbers[i];
             }
-            move = Math.min(move, i * 2 + name.length() - next);
-            move = Math.min(move, (name.length() - next) * 2 + i);
+            stack.push(i);
         }
-
-        answer += move;
         return answer;
     }
 }

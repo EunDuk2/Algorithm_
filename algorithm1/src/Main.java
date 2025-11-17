@@ -9,12 +9,26 @@ public class Main {
         char[] charArr = str.toCharArray();
 
         String result = "YES";
-        for(int i = 0 ; i < charArr.length / 2 ; i++) {
-            if(charArr[i] != charArr[charArr.length-1-i]) {
-                result = "NO";
-                break;
+
+        int lt = 0;
+        int rt = charArr.length-1;
+
+        while(lt < rt) {
+            if(!isText(charArr[lt])) lt++;
+            else if(!isText(charArr[rt])) rt--;
+            else {
+                if(charArr[lt] != charArr[rt]) {
+                    result = "NO";
+                    break;
+                } else {
+                    lt++;
+                    rt--;
+                }
             }
         }
         System.out.println(result);
+    }
+    static boolean isText(char c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 }

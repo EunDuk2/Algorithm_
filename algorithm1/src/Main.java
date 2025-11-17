@@ -5,16 +5,20 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] strArr = br.readLine().split(" ");
+        int N = Integer.parseInt(br.readLine());
 
-        String result = "";
+        for(int i = 0 ; i < N ; i++) {
+            char[] chArr = br.readLine().toCharArray();
 
-        for(String s : strArr) {
-            if(s.length() > result.length()) {
-                result = s;
+            for(int j = 0 ; j < chArr.length / 2 ; j++) {
+                char start = chArr[j];
+                char end = chArr[chArr.length-1-j];
+
+                chArr[j] = end;
+                chArr[chArr.length-1-j] = start;
             }
-        }
 
-        System.out.println(result);
+            System.out.println(new String(chArr));
+        }
     }
 }

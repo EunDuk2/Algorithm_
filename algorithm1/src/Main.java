@@ -1,24 +1,35 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
+        char[] chArr = br.readLine().toCharArray();
 
-        for(int i = 0 ; i < N ; i++) {
-            char[] chArr = br.readLine().toCharArray();
+        int left = 0;
+        int right = chArr.length-1;
 
-            for(int j = 0 ; j < chArr.length / 2 ; j++) {
-                char start = chArr[j];
-                char end = chArr[chArr.length-1-j];
-
-                chArr[j] = end;
-                chArr[chArr.length-1-j] = start;
+        while(left<right) {
+            while (left < right && !isText(chArr[left])) {
+                left++;
             }
 
-            System.out.println(new String(chArr));
+            while (left < right && !isText(chArr[right])) {
+                right--;
+            }
+
+            char rightCh = chArr[right];
+            chArr[right] = chArr[left];
+            chArr[left] = rightCh;
+
+            left++;
+            right--;
         }
+
+        System.out.println(chArr);
+    }
+
+    static boolean isText(char c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 }

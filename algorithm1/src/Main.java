@@ -5,18 +5,17 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String str = br.readLine().toUpperCase();
-        Character ch = Character.toUpperCase(br.readLine().charAt(0));
+        String str = br.readLine();
+        StringBuilder sb = new StringBuilder();
 
-        int result = 0;
-
-        for(int i = 0 ; i < str.length() ; i++) {
-            Character c = str.charAt(i);
-
-            if(c.equals(ch)) {
-                result += 1;
+        for(char c : str.toCharArray()) {
+            if(Character.isUpperCase(c)) {
+                sb.append(Character.toLowerCase(c));
+            } else {
+                sb.append(Character.toUpperCase(c));
             }
         }
-        System.out.println(result);
+
+        System.out.println(sb);
     }
 }

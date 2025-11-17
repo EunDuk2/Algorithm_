@@ -5,18 +5,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String str = br.readLine();
-        Set<Character> set = new LinkedHashSet();
+        String str = br.readLine().toUpperCase();
+        char[] charArr = str.toCharArray();
 
-        for(char c : str.toCharArray()) {
-            set.add(c);
+        String result = "YES";
+        for(int i = 0 ; i < charArr.length / 2 ; i++) {
+            if(charArr[i] != charArr[charArr.length-1-i]) {
+                result = "NO";
+                break;
+            }
         }
-
-        StringBuilder sb = new StringBuilder();
-        for(char c : set) {
-            sb.append(c);
-        }
-
-        System.out.println(sb);
+        System.out.println(result);
     }
 }

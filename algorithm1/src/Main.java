@@ -5,27 +5,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String str = br.readLine().toUpperCase();
-        char[] charArr = str.toCharArray();
+        char[] charArr = br.readLine().toCharArray();
 
-        String result = "YES";
-
-        int lt = 0;
-        int rt = charArr.length-1;
-
-        while(lt < rt) {
-            if(!isText(charArr[lt])) lt++;
-            else if(!isText(charArr[rt])) rt--;
-            else {
-                if(charArr[lt] != charArr[rt]) {
-                    result = "NO";
-                    break;
-                } else {
-                    lt++;
-                    rt--;
-                }
+        StringBuilder sb = new StringBuilder();
+        for(char c : charArr) {
+            if(!isText(c)) {
+                sb.append(c);
             }
         }
+        int result = Integer.parseInt(new String(sb));
+
         System.out.println(result);
     }
     static boolean isText(char c) {

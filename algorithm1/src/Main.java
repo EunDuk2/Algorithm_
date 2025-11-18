@@ -7,19 +7,20 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
 
-        int[] dp = new int[N+1];
+        int[] isPrime = new int[N+1];
 
-        dp[1] = 1;
-        dp[2] = 1;
-
-        for(int i = 3 ; i < dp.length ; i++) {
-            dp[i] = dp[i-1] + dp[i-2];
+        for(int i = 2 ; i*i < N+1 ; i++) {
+            for(int j = i*i ; j < N+1 ; j += i) {
+                if(isPrime[j] == 0) {
+                    isPrime[j] = 1;
+                }
+            }
         }
 
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < dp.length ; i++) {
-            sb.append(dp[i]).append(" ");
+        int count = 0;
+        for(int i = 2 ; i < isPrime.length ; i++) {
+            if(isPrime[i] == 0) count++;
         }
-        System.out.println(sb);
+        System.out.println(count);
     }
 }

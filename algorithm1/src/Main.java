@@ -5,38 +5,24 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
-        int[][] arr = new int[N][N];
+        int X = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < N; i++) {
-            String[] tmp = br.readLine().split(" ");
-            for (int j = 0; j < N; j++) {
-                arr[i][j] = Integer.parseInt(tmp[j]);
+        int cross_count = 1, prev_cross_count_sum = 0;
+
+        while(true) {
+            if(X <= (cross_count + prev_cross_count_sum)) {
+                if(cross_count % 2 == 1) { // 우상향
+                    // 분자 / 분모
+                    System.out.println(cross_count - (X - prev_cross_count_sum - 1) + "/" + (X - prev_cross_count_sum));
+                    break;
+                } else { // 좌하향
+                    System.out.println((X - prev_cross_count_sum) + "/" + (cross_count - (X - prev_cross_count_sum - 1)));
+                    break;
+                }
+            } else {
+                prev_cross_count_sum += cross_count;
+                cross_count++;
             }
         }
-
-        int count = 0;
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-
-                boolean isPeak = true;
-
-                // 상
-                if (i - 1 >= 0 && arr[i - 1][j] >= arr[i][j]) isPeak = false;
-
-                // 하
-                if (i + 1 < N && arr[i + 1][j] >= arr[i][j]) isPeak = false;
-
-                // 좌
-                if (j - 1 >= 0 && arr[i][j - 1] >= arr[i][j]) isPeak = false;
-
-                // 우
-                if (j + 1 < N && arr[i][j + 1] >= arr[i][j]) isPeak = false;
-
-                if (isPeak) count++;
-            }
-        }
-        System.out.println(count);
     }
 }

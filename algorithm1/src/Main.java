@@ -6,36 +6,37 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-
         int[][] arr = new int[N][N];
 
-        for(int i = 0 ; i < N ; i++) {
-            String[] strArr = br.readLine().split(" ");
-            for(int j = 0 ; j < N ; j++) {
-                arr[i][j] = Integer.parseInt(strArr[j]);
+        for (int i = 0; i < N; i++) {
+            String[] tmp = br.readLine().split(" ");
+            for (int j = 0; j < N; j++) {
+                arr[i][j] = Integer.parseInt(tmp[j]);
             }
         }
 
-        int max = Integer.MIN_VALUE;
-        int line1 = 0;
-        int line2 = 0;
-        for(int i = 0 ; i < N ; i++) {
-            int row = 0;
-            int column = 0;
-            for(int j = 0 ; j < N ; j++) {
-                // 행
-                row += arr[i][j];
-                // 열
-                column += arr[j][i];
-            }
-            line1 += arr[i][i];
-            line2 += arr[i][N-1-i];
-            max = Math.max(max, row);
-            max = Math.max(max, column);
-        }
-        max = Math.max(max, line1);
-        max = Math.max(max, line2);
+        int count = 0;
 
-        System.out.println(max);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+
+                boolean isPeak = true;
+
+                // 상
+                if (i - 1 >= 0 && arr[i - 1][j] >= arr[i][j]) isPeak = false;
+
+                // 하
+                if (i + 1 < N && arr[i + 1][j] >= arr[i][j]) isPeak = false;
+
+                // 좌
+                if (j - 1 >= 0 && arr[i][j - 1] >= arr[i][j]) isPeak = false;
+
+                // 우
+                if (j + 1 < N && arr[i][j + 1] >= arr[i][j]) isPeak = false;
+
+                if (isPeak) count++;
+            }
+        }
+        System.out.println(count);
     }
 }

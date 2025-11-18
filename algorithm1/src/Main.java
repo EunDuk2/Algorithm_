@@ -4,24 +4,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        char[] charArr = br.readLine().toCharArray();
-
-        char temp = charArr[0];
-        int count = 0;
+        int N = Integer.parseInt(br.readLine());
+        String s = br.readLine().replace('#', '1').replace('*', '0');
 
         StringBuilder sb = new StringBuilder();
-        for(char c : charArr) {
-            if(temp == c) {
-                count++;
-            } else {
-                sb.append(temp);
-                if(count != 1) sb.append(count);
-                temp = c;
-                count = 1;
-            }
+        for(int i = 0 ; i < N ; i++) {
+            String cut = s.substring(0, 7);
+            char c = (char) Integer.parseInt(cut, 2);
+            sb.append(c);
+            s = s.substring(7);
         }
-        sb.append(temp);
-        if(count != 1) sb.append(count);
         System.out.println(sb);
     }
 }

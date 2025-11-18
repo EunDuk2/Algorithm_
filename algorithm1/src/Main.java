@@ -6,21 +6,34 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-
-        int[] isPrime = new int[N+1];
-
-        for(int i = 2 ; i*i < N+1 ; i++) {
-            for(int j = i*i ; j < N+1 ; j += i) {
-                if(isPrime[j] == 0) {
-                    isPrime[j] = 1;
-                }
-            }
+        String[] strArr = br.readLine().split(" ");
+        int[] input = new int[N];
+        for(int i = 0 ; i < N ; i++) {
+            input[i] = Integer.parseInt(strArr[i]);
         }
 
-        int count = 0;
-        for(int i = 2 ; i < isPrime.length ; i++) {
-            if(isPrime[i] == 0) count++;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < N ; i++) {
+            int reverseNum = changeReverse(input[i]);
+            if(isPrime(reverseNum)) sb.append(reverseNum).append(" ");
         }
-        System.out.println(count);
+        System.out.println(sb);
+    }
+    static int changeReverse(int num) {
+        int temp = num;
+        int reverse = 0;
+        while(temp > 0) {
+            int t = temp % 10;
+            reverse = reverse * 10 + t;
+            temp = temp / 10;
+        }
+        return reverse;
+    }
+    static boolean isPrime(int num) {
+        if(num == 1 || num == 0) return false;
+        for(int i = 2 ; i*i <= num ; i++) {
+            if(num % i == 0) return false;
+        }
+        return true;
     }
 }

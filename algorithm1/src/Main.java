@@ -1,23 +1,37 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        char[] charArr = br.readLine().toCharArray();
+        String[] strArr = br.readLine().split(" ");
+        char[] s = strArr[0].toCharArray();
+        char t = strArr[1].charAt(0);
 
-        StringBuilder sb = new StringBuilder();
-        for(char c : charArr) {
-            if(!isText(c)) {
-                sb.append(c);
+        int[] result = new int[s.length];
+
+        int distance = 1000;
+        for(int i = 0 ; i < s.length ; i++) {
+            if(s[i] == t) {
+                distance = 0;
+            } else {
+                distance++;
             }
+            result[i] = distance;
         }
-        int result = Integer.parseInt(new String(sb));
-
-        System.out.println(result);
-    }
-    static boolean isText(char c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+        distance = 1000;
+        for(int i = s.length-1 ; i >= 0 ; i--) {
+            if(s[i] == t) {
+                distance = 0;
+            } else {
+                distance++;
+            }
+            result[i] = Math.min(result[i], distance);
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int n : result) {
+            sb.append(n).append(" ");
+        }
+        System.out.println(sb);
     }
 }

@@ -6,28 +6,36 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        String[] strArr = br.readLine().split(" ");
 
-        int[] input = new int[N];
-        List<Integer> list = new ArrayList();
+        int[][] arr = new int[N][N];
+
         for(int i = 0 ; i < N ; i++) {
-            input[i] = Integer.parseInt(strArr[i]);
-            list.add(input[i]);
+            String[] strArr = br.readLine().split(" ");
+            for(int j = 0 ; j < N ; j++) {
+                arr[i][j] = Integer.parseInt(strArr[j]);
+            }
         }
 
-        list.sort(Comparator.reverseOrder());
-
-        Map<Integer, Integer> map = new HashMap();
-        int rank = 1;
-        for(int score : list) {
-            if(!map.containsKey(score)) map.put(score, rank);
-            rank++;
-        }
-
-        StringBuilder sb = new StringBuilder();
+        int max = Integer.MIN_VALUE;
+        int line1 = 0;
+        int line2 = 0;
         for(int i = 0 ; i < N ; i++) {
-            sb.append(map.get(input[i])).append(" ");
+            int row = 0;
+            int column = 0;
+            for(int j = 0 ; j < N ; j++) {
+                // 행
+                row += arr[i][j];
+                // 열
+                column += arr[j][i];
+            }
+            line1 += arr[i][i];
+            line2 += arr[i][N-1-i];
+            max = Math.max(max, row);
+            max = Math.max(max, column);
         }
-        System.out.println(sb);
+        max = Math.max(max, line1);
+        max = Math.max(max, line2);
+
+        System.out.println(max);
     }
 }

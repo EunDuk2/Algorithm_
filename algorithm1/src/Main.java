@@ -12,16 +12,15 @@ public class Main {
             input[i] = Integer.parseInt(strArr[i]);
         }
 
-        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        int height = 0;
+
         for(int i = 0 ; i < N ; i++) {
-            if(i == 0) {
-                sb.append(input[i]).append(" ");
-            } else {
-                if(input[i-1] < input[i]) {
-                    sb.append(input[i]).append(" ");
-                }
+            if(input[i] > height) {
+                count++;
+                height = input[i];
             }
         }
-        System.out.println(sb);
+        System.out.println(count);
     }
 }

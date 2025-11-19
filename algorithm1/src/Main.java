@@ -5,31 +5,27 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        char[] input1 = br.readLine().toCharArray();
-        char[] input2 = br.readLine().toCharArray();
+        String[] NK = br.readLine().split(" ");
+        int N = Integer.parseInt(NK[0]);
+        int K = Integer.parseInt(NK[1]);
 
-        Map<Character, Integer> map1 = new HashMap();
-        for(char c : input1) {
-            map1.put(c, map1.getOrDefault(c, 0)+1);
-        }
+        String[] numbers = br.readLine().split(" ");
 
-        Map<Character, Integer> map2 = new HashMap();
-        for(char c : input2) {
-            map2.put(c, map2.getOrDefault(c, 0)+1);
-        }
+        Map<String, Integer> map = new HashMap();
 
-        boolean isAnswer = true;
-        for(char c : map1.keySet()) {
-            if(!map2.containsKey(c)) {
-                isAnswer = false;
-                break;
-            }
-            if(map1.get(c) != map2.get(c)) {
-                isAnswer = false;
-                break;
+        StringBuilder sb = new StringBuilder();
+        int lt = 0;
+        for(int rt = 0 ; rt < N ; rt++) {
+            map.put(numbers[rt], map.getOrDefault(numbers[rt], 0)+1);
+            if(rt-lt+1 == K) {
+                sb.append(map.size()).append(" ");
+                map.put(numbers[lt], map.get(numbers[lt])-1);
+                if(map.get(numbers[lt]) == 0) {
+                    map.remove(numbers[lt]);
+                }
+                lt++;
             }
         }
-        if(isAnswer) System.out.println("YES");
-        else System.out.println("NO");
+        System.out.println(sb);
     }
 }

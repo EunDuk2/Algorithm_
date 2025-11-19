@@ -5,44 +5,31 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
-        String[] firstArr = br.readLine().split(" ");
-        int M = Integer.parseInt(br.readLine());
-        String[] secondArr = br.readLine().split(" ");
+        String[] NK = br.readLine().split(" ");
+        int N = Integer.parseInt(NK[0]);
+        int K = Integer.parseInt(NK[1]);
 
-        int[] first = new int[N];
-        int[] second = new int[M];
+        String[] inputStr = br.readLine().split(" ");
+        int[] numbers = new int[N];
 
         for(int i = 0 ; i < N ; i++) {
-            first[i] = Integer.parseInt(firstArr[i]);
-        }
-        for(int i = 0 ; i < M ; i++) {
-            second[i] = Integer.parseInt(secondArr[i]);
+            numbers[i] = Integer.parseInt(inputStr[i]);
         }
 
-        Arrays.sort(first);
-        Arrays.sort(second);
+        int start = 0;
+        int end = K-1;
 
-        int fp = 0;
-        int sp = 0;
-        List<Integer> list = new ArrayList();
-
-        while(fp < N && sp < M) {
-            if(first[fp] == second[sp]) {
-                list.add(first[fp]);
-                fp++;
-                sp++;
-            } else if(first[fp] < second[sp]) {
-                fp++;
-            } else {
-                sp++;
-            }
+        int max = 0;
+        for(int i = start ; i <= end ; i++) {
+            max += numbers[i];
         }
 
-        StringBuilder sb = new StringBuilder();
-        for(int n : list) {
-            sb.append(n).append(" ");
+        int sum = max;
+        while(end < N-1) {
+            sum -= numbers[start++];
+            sum += numbers[++end];
+            max = Math.max(max, sum);
         }
-        System.out.println(sb);
+        System.out.println(max);
     }
 }

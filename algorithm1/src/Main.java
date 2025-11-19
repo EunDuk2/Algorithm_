@@ -4,30 +4,24 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int M = Integer.parseInt(NM[1]);
+        int N = Integer.parseInt(br.readLine());
 
-        String[] inputStr = br.readLine().split(" ");
         int[] numbers = new int[N];
 
         for(int i = 0 ; i < N ; i++) {
-            numbers[i] = Integer.parseInt(inputStr[i]);
+            numbers[i] = i+1;
         }
 
-        int lt = 0;
-        int rt = 0;
-
-        int sum = 0;
-        int count = 0;
+        int lt = 0, rt = 0;
+        int sum = 0, count = 0;
         while(true) {
-            if(sum == M) {
+            if(sum == N) {
                 count++;
                 sum -= numbers[lt++];
-            } else if(sum > M) {
+            } else if(sum > N) {
                 sum -= numbers[lt++];
-            } else {
-                if(rt >= N) break;
+            } else if(sum < N) {
+                if(rt == N-1) break;
                 sum += numbers[rt++];
             }
         }

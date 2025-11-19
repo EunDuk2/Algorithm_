@@ -20,29 +20,29 @@ public class Main {
             second[i] = Integer.parseInt(secondArr[i]);
         }
 
+        Arrays.sort(first);
+        Arrays.sort(second);
+
         int fp = 0;
         int sp = 0;
-
         List<Integer> list = new ArrayList();
 
         while(fp < N && sp < M) {
-            if(first[fp] < second[sp]) {
+            if(first[fp] == second[sp]) {
                 list.add(first[fp]);
                 fp++;
+                sp++;
+            } else if(first[fp] < second[sp]) {
+                fp++;
             } else {
-                list.add(second[sp]);
                 sp++;
             }
         }
-        if(fp == N) {
-            while(sp < M) {
-                list.add(second[sp++]);
-            }
-        } else {
-            while(fp < N) {
-                list.add(first[fp++]);
-            }
+
+        StringBuilder sb = new StringBuilder();
+        for(int n : list) {
+            sb.append(n).append(" ");
         }
-        System.out.println(list);
+        System.out.println(sb);
     }
 }

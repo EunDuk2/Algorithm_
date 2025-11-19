@@ -2,55 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static int M;
-    static List<List<Integer>> doubleList = new ArrayList();
-    static List<Integer> temp = new ArrayList();
-    static boolean[] visited;
-    static int[] numbers;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        N = Integer.parseInt(NM[0]);
-        M = Integer.parseInt(NM[1]);
-        visited = new boolean[N];
+        String[] strArr = br.readLine().split(" ");
+        int N = Integer.parseInt(strArr[0]);
+        int M = Integer.parseInt(strArr[1]);
 
-        String[] inputNumbers = br.readLine().split(" ");
+        int[][] arr = new int[M][N];
 
-        numbers = new int[N];
-        for(int i = 0 ; i < N ; i++) {
-            numbers[i] = Integer.parseInt(inputNumbers[i]);
-        }
-        Arrays.sort(numbers);
-
-        dfs(0);
-
-        StringBuilder sb = new StringBuilder();
-        for(List<Integer> list : doubleList) {
-            for(int i = 0 ; i < M ; i++) {
-                sb.append(list.get(i)).append(" ");
-            }
-            sb.append("\n");
-        }
-
-        System.out.println(sb);
-    }
-    static void dfs(int depth) {
-        if(temp.size() == M) {
-            doubleList.add(new ArrayList(temp));
-            return;
-        }
-
-        for(int i = 0 ; i < N ; i++) {
-            if(!visited[i]) {
-                temp.add(numbers[i]);
-                visited[i] = true;
-                dfs(depth+1);
-                temp.remove(temp.size()-1);
-                visited[i] = false;
+        for(int i = 0 ; i < M ; i++) {
+            String[] input = br.readLine().split(" ");
+            for(int j = 0 ; j < N ; j++) {
+                arr[i][j] = Integer.parseInt(input[j]);
             }
         }
+
+        // 학생별로 돌면서, 자기보다 높은애들을 set에 넣고, 인원수 - set.size
+        int count = 0;
+        for(int i = 1 ; i <= N ; i++) {
+            Set<Integer> set = new HashSet();
+            for(int j = 0 ; j < M ; j++) {
+                for(int k = 0 ; k < N ; k++) {
+                    if(i == arr[j][k]) {
+                        break;
+                    } else {
+                        set.add(arr[j][k]);
+                    }
+                }
+            }
+            count += N - set.size()-1;
+        }
+        System.out.println(count);
     }
 }

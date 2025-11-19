@@ -1,32 +1,27 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int K = Integer.parseInt(NM[1]);
+        int N = Integer.parseInt(br.readLine());
+        char[] input = br.readLine().toCharArray();
 
-        String[] inputStr = br.readLine().split(" ");
-        int[] numbers = new int[N];
+        Map<Character, Integer> map = new HashMap();
 
-        for(int i = 0 ; i < N ; i++) {
-            numbers[i] = Integer.parseInt(inputStr[i]);
+        for(char c : input) {
+            map.put(c, map.getOrDefault(c, 0)+1);
         }
 
-        int lt = 0;
-        int answer = 0;
-        int cnt = 0;
-
-        for(int rt = 0 ; rt < N ; rt++) {
-            if(numbers[rt] == 0) cnt++;
-            while(cnt > K) {
-                if(numbers[lt] == 0) cnt--;
-                lt++;
+        int max = 0;
+        char maxChar = input[0];
+        for(char c : map.keySet()) {
+            if(map.get(c) > max) {
+                max = map.get(c);
+                maxChar = c;
             }
-            answer = Math.max(answer, rt-lt+1);
         }
-        System.out.println(answer);
+        System.out.println(maxChar);
     }
 }

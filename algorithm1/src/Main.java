@@ -2,38 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
+    static int N;
+    static int M;
+    static List<List<Integer>> doubleList = new ArrayList();
+    static List<Integer> temp = new ArrayList();
+    static boolean[] visited;
+    static int[] numbers;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
-        int[][] arr = new int[N][N];
+        String[] NM = br.readLine().split(" ");
+        N = Integer.parseInt(NM[0]);
+        M = Integer.parseInt(NM[1]);
+        visited = new boolean[N];
 
+        String[] inputNumbers = br.readLine().split(" ");
+
+        numbers = new int[N];
         for(int i = 0 ; i < N ; i++) {
-            String[] strArr = br.readLine().split(" ");
-            for(int j = 0 ; j < N ; j++) {
-                arr[i][j] = Integer.parseInt(strArr[j]);
+            numbers[i] = Integer.parseInt(inputNumbers[i]);
+        }
+        Arrays.sort(numbers);
+
+        dfs(0);
+
+        StringBuilder sb = new StringBuilder();
+        for(List<Integer> list : doubleList) {
+            for(int i = 0 ; i < M ; i++) {
+                sb.append(list.get(i)).append(" ");
             }
+            sb.append("\n");
         }
 
-        int count = 0;
+        System.out.println(sb);
+    }
+    static void dfs(int depth) {
+        if(temp.size() == M) {
+            doubleList.add(new ArrayList(temp));
+            return;
+        }
+
         for(int i = 0 ; i < N ; i++) {
-            for(int j = 0 ; j < N ; j++) {
-                int current = arr[i][j];
-                boolean isTop = true;
-                for(int k = 0 ; k < 4 ; k++) {
-                    int nx = i + dx[k];
-                    int ny = j + dy[k];
-                    if(nx >= 0 && nx < N && ny >= 0 && ny < N && arr[nx][ny] >= current) {
-                        isTop = false;
-                        break;
-                    }
-                }
-                if(isTop) count++;
+            if(!visited[i]) {
+                temp.add(numbers[i]);
+                visited[i] = true;
+                dfs(depth+1);
+                temp.remove(temp.size()-1);
+                visited[i] = false;
             }
         }
-        System.out.println(count);
     }
 }

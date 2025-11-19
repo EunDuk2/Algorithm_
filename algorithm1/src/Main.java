@@ -2,48 +2,38 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static int M;
-
-    static List<Integer> numbers = new ArrayList();
-    static List<List<Integer>> doubleList = new ArrayList();
-    static List<Integer> temp = new ArrayList();
-    static boolean[] visited;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        N = Integer.parseInt(NM[0]);
-        M = Integer.parseInt(NM[1]);
-        visited = new boolean[N];
+        int N = Integer.parseInt(br.readLine());
+        int[][] arr = new int[N][N];
 
-        String[] inputNumbers = br.readLine().split(" ");
-        for(int i = 0 ; i < inputNumbers.length ; i++) {
-            numbers.add(Integer.parseInt(inputNumbers[i]));
-        }
-        numbers.sort(Comparator.naturalOrder());
-
-        dfs(0);
-
-        for (List<Integer> list : doubleList) {
-            for (int n : list) System.out.print(n + " ");
-            System.out.println();
-        }
-    }
-    static void dfs(int depth) {
-        if(temp.size() == M) {
-            doubleList.add(new ArrayList(temp));
-            return;
-        }
-        for(int i = 0 ; i < numbers.size() ; i++) {
-            if(!visited[i]) {
-                visited[i] = true;
-                temp.add(numbers.get(i));
-                dfs(depth+1);
-                visited[i] = false;
-                temp.remove(temp.size()-1);
+        for(int i = 0 ; i < N ; i++) {
+            String[] strArr = br.readLine().split(" ");
+            for(int j = 0 ; j < N ; j++) {
+                arr[i][j] = Integer.parseInt(strArr[j]);
             }
         }
+
+        int count = 0;
+        for(int i = 0 ; i < N ; i++) {
+            for(int j = 0 ; j < N ; j++) {
+                int current = arr[i][j];
+                boolean isTop = true;
+                for(int k = 0 ; k < 4 ; k++) {
+                    int nx = i + dx[k];
+                    int ny = j + dy[k];
+                    if(nx >= 0 && nx < N && ny >= 0 && ny < N && arr[nx][ny] >= current) {
+                        isTop = false;
+                        break;
+                    }
+                }
+                if(isTop) count++;
+            }
+        }
+        System.out.println(count);
     }
 }

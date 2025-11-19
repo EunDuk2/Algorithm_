@@ -1,13 +1,12 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NK = br.readLine().split(" ");
-        int N = Integer.parseInt(NK[0]);
-        int K = Integer.parseInt(NK[1]);
+        String[] NM = br.readLine().split(" ");
+        int N = Integer.parseInt(NM[0]);
+        int M = Integer.parseInt(NM[1]);
 
         String[] inputStr = br.readLine().split(" ");
         int[] numbers = new int[N];
@@ -16,20 +15,22 @@ public class Main {
             numbers[i] = Integer.parseInt(inputStr[i]);
         }
 
-        int start = 0;
-        int end = K-1;
+        int lt = 0;
+        int rt = 0;
 
-        int max = 0;
-        for(int i = start ; i <= end ; i++) {
-            max += numbers[i];
+        int sum = 0;
+        int count = 0;
+        while(true) {
+            if(sum == M) {
+                count++;
+                sum -= numbers[lt++];
+            } else if(sum > M) {
+                sum -= numbers[lt++];
+            } else {
+                if(rt >= N) break;
+                sum += numbers[rt++];
+            }
         }
-
-        int sum = max;
-        while(end < N-1) {
-            sum -= numbers[start++];
-            sum += numbers[++end];
-            max = Math.max(max, sum);
-        }
-        System.out.println(max);
+        System.out.println(count);
     }
 }

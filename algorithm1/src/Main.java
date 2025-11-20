@@ -9,19 +9,18 @@ public class Main {
 
         Stack<Character> stack = new Stack();
 
-        boolean isAnswer = true;
         for(char c : input) {
-            if(c == '(') stack.push(c);
-            else {
-                if(stack.isEmpty()) {
-                    isAnswer = false;
-                    break;
-                } else {
-                    stack.pop();
-                }
+            if(c == ')') {
+                while(stack.pop() != '(');
+            } else {
+                stack.push(c);
             }
         }
-        if(stack.isEmpty() && isAnswer) System.out.println("YES");
-        else System.out.println("NO");
+
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+        System.out.println(sb.reverse());
     }
 }

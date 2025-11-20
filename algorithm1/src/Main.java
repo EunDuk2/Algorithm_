@@ -5,26 +5,39 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NK = br.readLine().split(" ");
+        String[] input1 = br.readLine().split("");
+        String[] input2 = br.readLine().split("");
 
-        int N = Integer.parseInt(NK[0]);
-        int K = Integer.parseInt(NK[1]);
-
-        Queue<Integer> q = new LinkedList();
-        for(int i = 1 ; i <= N ; i++) {
-            q.add(i);
+        Queue<String> subQ1 = new LinkedList();
+        for(String s : input1) {
+            subQ1.add(s);
         }
 
-        int index = 1;
-        while(q.size() > 1) {
-            if(index == K) {
-                q.poll();
-                index = 1;
+        Queue<String> subQ2 = new LinkedList();
+        for(String s : input2) {
+            subQ2.add(s);
+        }
+
+        // 수업설계를 큐에 넣고, 계속 빼는데
+        // 필수과목안에 포함되어있다면, 필수과목의 맨 앞이 자기와 같은지
+        boolean answer = true;
+        while(!subQ2.isEmpty()) {
+            String firstSub = subQ2.peek();
+            if(subQ1.contains(firstSub)) {
+                String firstNesSub = subQ1.peek();
+                if(firstSub.equals(firstNesSub)) {
+                    subQ1.poll();
+                    subQ2.poll();
+                } else {
+                    answer = false;
+                    break;
+                }
             } else {
-                q.add(q.poll());
-                index++;
+                subQ2.poll();
             }
         }
-        System.out.println(q.peek());
+        if(!subQ1.isEmpty()) answer = false;
+        if(answer) System.out.println("YES");
+        else System.out.println("NO");
     }
 }

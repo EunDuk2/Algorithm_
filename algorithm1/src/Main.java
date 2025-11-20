@@ -2,35 +2,41 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static Set<Integer> set = new TreeSet(Comparator.reverseOrder());
+    static int N, K;
+    static int[] numbers;
+    static int sum = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        char[] input = br.readLine().toCharArray();
-        char[] ana = br.readLine().toCharArray();
+        String[] NK = br.readLine().split(" ");
+        N = Integer.parseInt(NK[0]);
+        K = Integer.parseInt(NK[1]);
+        String[] arr = br.readLine().split(" ");
 
-        // ana -> map
-        Map<Character, Integer> anaMap = new HashMap();
-        for(char c : ana) {
-            anaMap.put(c, anaMap.getOrDefault(c, 0)+1);
+        numbers = new int[N];
+        for(int i = 0 ; i < N ; i++) {
+            numbers[i] = Integer.parseInt(arr[i]);
         }
+        dfs(0, 0);
 
-        Map<Character, Integer> inputMap = new HashMap();
-        int count = 0;
-        int lt = 0;
-        for(int rt = 0 ; rt < input.length ; rt++) {
-            inputMap.put(input[rt], inputMap.getOrDefault(input[rt], 0)+1);
-
-            if(rt - lt + 1 == ana.length) {
-                if(inputMap.equals(anaMap)) {
-                    count++;
-                }
-
-                inputMap.put(input[lt], inputMap.get(input[lt]) - 1);
-                if(inputMap.get(input[lt]) == 0) inputMap.remove(input[lt]);
-                lt++;
-            }
-
+        int index = 1;
+        int answer = -1;
+        for(int n : set) {
+            if(index++ == K) answer = n;
         }
-        System.out.println(count);
+        System.out.println(answer);
+    }
+    static void dfs(int start, int depth) {
+        if(depth == 3) {
+            set.add(sum);
+            return;
+        }
+        for(int i = start ; i < N ; i++) {
+            sum += numbers[i];
+            dfs(i+1, depth+1);
+            sum -= numbers[i];
+        }
     }
 }

@@ -5,24 +5,26 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        char[] arr = br.readLine().toCharArray();
+        String[] NK = br.readLine().split(" ");
 
-        Stack<Character> stack = new Stack();
+        int N = Integer.parseInt(NK[0]);
+        int K = Integer.parseInt(NK[1]);
 
-        int count = 0;
-        for(int i = 0 ; i < arr.length ; i++) {
-            if(arr[i] == '(') {
-                stack.push(arr[i]);
+        Queue<Integer> q = new LinkedList();
+        for(int i = 1 ; i <= N ; i++) {
+            q.add(i);
+        }
+
+        int index = 1;
+        while(q.size() > 1) {
+            if(index == K) {
+                q.poll();
+                index = 1;
             } else {
-                if(arr[i-1] == '(') {
-                    stack.pop();
-                    count += stack.size();
-                } else {
-                    stack.pop();
-                    count += 1;
-                }
+                q.add(q.poll());
+                index++;
             }
         }
-        System.out.println(count);
+        System.out.println(q.peek());
     }
 }

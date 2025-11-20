@@ -7,25 +7,22 @@ public class Main {
 
         char[] arr = br.readLine().toCharArray();
 
-        Stack<Integer> stack = new Stack();
+        Stack<Character> stack = new Stack();
 
-        for(char c : arr) {
-            if(c == '+' || c == '-' || c == '*' || c == '/') {
-                int num2 = stack.pop();
-                int num1 = stack.pop();
-                if(c == '+') {
-                    stack.push(num1 + num2);
-                } else if(c == '-') {
-                    stack.push(num1 - num2);
-                } else if(c == '*') {
-                    stack.push(num1 * num2);
-                } else {
-                    stack.push(num1 / num2);
-                }
+        int count = 0;
+        for(int i = 0 ; i < arr.length ; i++) {
+            if(arr[i] == '(') {
+                stack.push(arr[i]);
             } else {
-                stack.push(c - '0');
+                if(arr[i-1] == '(') {
+                    stack.pop();
+                    count += stack.size();
+                } else {
+                    stack.pop();
+                    count += 1;
+                }
             }
         }
-        System.out.println(stack.pop());
+        System.out.println(count);
     }
 }

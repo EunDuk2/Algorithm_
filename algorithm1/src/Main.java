@@ -3,113 +3,70 @@ import java.util.*;
 
 public class Main {
     static int N, M;
-    static int r, c, d;
-    static int[][] room;
+    static int[][] board;
+    static int x, y;
+    static int d = 2; // 0-3 : 북동남서
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        N = Integer.parseInt(NM[0]);
-        M = Integer.parseInt(NM[1]);
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-        String[] rcd = br.readLine().split(" ");
-        r = Integer.parseInt(rcd[0]);
-        c = Integer.parseInt(rcd[1]);
-        d = Integer.parseInt(rcd[2]);
+        board = new int[N][N];
+        x = 0;
+        y = 0;
+        
+        for(int i = N*N ; i > 0 ; i--) {
+            board[x][y] = i;
+            nextXy();
+        }
 
-        room = new int[N][M];
+        StringBuilder sb = new StringBuilder();
+        for(int[] a : board) {
+            for(int b : a) {
+                sb.append(b).append(" ");
+            }
+            sb.append("\n");
+        }
         for(int i = 0 ; i < N ; i++) {
-            String[] roomStr = br.readLine().split(" ");
-            for(int j = 0 ; j < M ; j++) {
-                room[i][j] = Integer.parseInt(roomStr[j]);
+            for(int j = 0 ; j < N ; j++) {
+                if(board[i][j] == M) {
+                    sb.append((i+1) + " " + (j+1));
+                }
             }
         }
-
-        int answer = 0;
-        while(true) {
-            // 1. 현재 칸이 아직 청소되지 않은 경우, 현재 칸을 청소한다.
-            if(room[r][c] == 0) {
-                room[r][c] = 2;
-                answer++;
-            }
-            // 2. 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 없는 경우,
-            else if(isCleanAround()) {
-                // 1. 바라보는 방향을 유지한 채로 한 칸 후진할 수 있다면 한 칸 후진하고 1번으로 돌아간다.
-                int[] nextRc = nextRc(true);
-                int nr = nextRc[0];
-                int nc = nextRc[1];
-                if(room[nr][nc] != 1) {
-                    r = nr;
-                    c = nc;
-                }
-                // 2. 바라보는 방향의 뒤쪽 칸이 벽이라 후진할 수 없다면 작동을 멈춘다.
-                else if(room[nr][nc] == 1) {
-                    break;
-                }
-            }
-            // 3. 현재 칸의 주변 4칸 중 청소되지 않은 빈 칸이 있는 경우,
-            else if(!isCleanAround()) {
-                // 1. 반시계 방향으로 90도 회전한다.
-                d--;
-                if(d == -1) d = 3;
-                // 2. 바라보는 방향을 기준으로 앞쪽 칸이 청소되지 않은 빈 칸인 경우 한 칸 전진한다.
-                int[] nextRc = nextRc(false);
-                int nr = nextRc[0];
-                int nc = nextRc[1];
-                if(room[nr][nc] == 0) {
-                    r = nr;
-                    c = nc;
-                }
-                // 3. 1번으로 돌아간다.
-                continue;
-            }
-        }
-        System.out.println(answer);
+        System.out.println(sb);
     }
-    // 로봇 청소기의 다음 위치를 계산하여 반환 nr, nc (앞 뒤 기준 받기)
-    static int[] nextRc(boolean isBack) {
-        int[] rc = new int[2];
-
+    // 다음 위치 계산하고 못가면 방향바꾼 다음 위치로 반환
+    static void nextXy() {
         if(d == 0) {
-            if(!isBack) {
-                rc[0] = r-1;
-                rc[1] = c;
+            if(x-1 < 0 || board[x-1][y] != 0) {
+                d = 3;
+                y = y-1;
             } else {
-                rc[0] = r+1;
-                rc[1] = c;
+                x = x-1;
             }
         } else if(d == 1) {
-            if(!isBack) {
-                rc[0] = r;
-                rc[1] = c+1;
+            if(y+1 >= N || board[x][y+1] != 0) {
+                d = 0;
+                x = x-1;
             } else {
-                rc[0] = r;
-                rc[1] = c-1;
+                y = y+1;
             }
         } else if(d == 2) {
-            if(!isBack) {
-                rc[0] = r+1;
-                rc[1] = c;
+            if(x+1 >= N || board[x+1][y] != 0) {
+                d = 1;
+                y = y+1;
             } else {
-                rc[0] = r-1;
-                rc[1] = c;
+                x = x+1;
             }
         } else if(d == 3) {
-            if(!isBack) {
-                rc[0] = r;
-                rc[1] = c-1;
+            if(y-1 < 0 || board[x][y-1] != 0) {
+                d = 2;
+                x = x+1;
             } else {
-                rc[0] = r;
-                rc[1] = c+1;
+                y = y-1;
             }
         }
-        return rc;
-    }
-    // 주변 4칸 중 청소되지 않은 빈 칸이 있는 경우: false, 없는 경우: true
-    static boolean isCleanAround() {
-        if(room[r-1][c] == 0 || room[r][c+1] == 0 || room[r+1][c] == 0 || room[r][c-1] == 0) {
-            return false;
-        }
-        return true;
     }
 }

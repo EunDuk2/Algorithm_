@@ -5,39 +5,37 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] input1 = br.readLine().split("");
-        String[] input2 = br.readLine().split("");
+        String[] NM = br.readLine().split(" ");
+        int N = Integer.parseInt(NM[0]);
+        int M = Integer.parseInt(NM[1]);
 
-        Queue<String> subQ1 = new LinkedList();
-        for(String s : input1) {
-            subQ1.add(s);
+        String[] inputStr = br.readLine().split(" ");
+
+        Queue<Integer> q = new LinkedList();
+        for(int i = 0 ; i < N ; i++) {
+            q.add(Integer.parseInt(inputStr[i]));
         }
 
-        Queue<String> subQ2 = new LinkedList();
-        for(String s : input2) {
-            subQ2.add(s);
-        }
-
-        // 수업설계를 큐에 넣고, 계속 빼는데
-        // 필수과목안에 포함되어있다면, 필수과목의 맨 앞이 자기와 같은지
-        boolean answer = true;
-        while(!subQ2.isEmpty()) {
-            String firstSub = subQ2.peek();
-            if(subQ1.contains(firstSub)) {
-                String firstNesSub = subQ1.peek();
-                if(firstSub.equals(firstNesSub)) {
-                    subQ1.poll();
-                    subQ2.poll();
+        int target = M;
+        int count = 0;
+        while(!q.isEmpty()) {
+            int current = q.peek();
+            // 큐에 자신보다 큰 수가 있다면
+            if(q.stream().anyMatch(n -> n > current)) {
+                q.add(q.poll());
+                if(target == 0) {
+                    target = q.size()-1;
                 } else {
-                    answer = false;
-                    break;
+                    target--;
                 }
             } else {
-                subQ2.poll();
+                count++;
+                if(target == 0) break;
+                q.poll();
+                target--;
             }
         }
-        if(!subQ1.isEmpty()) answer = false;
-        if(answer) System.out.println("YES");
-        else System.out.println("NO");
+
+        System.out.println(count);
     }
 }

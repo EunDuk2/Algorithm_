@@ -5,7 +5,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
+        String[] SN = br.readLine().split(" ");
+        int S = Integer.parseInt(SN[0]);
+        int N = Integer.parseInt(SN[1]);
 
         String[] inputArr = br.readLine().split(" ");
         int[] input = new int[N];
@@ -13,22 +15,24 @@ public class Main {
             input[i] = Integer.parseInt(inputArr[i]);
         }
 
-        for (int i = 1; i < N; i++) {
-            int key = input[i];     // 끼워 넣을 값
-            int j = i - 1;
-
-            // key보다 큰 값들은 오른쪽으로 이동
-            while (j >= 0 && input[j] > key) {
-                input[j + 1] = input[j];
-                j--;
-            }
-
-            // key를 제자리 삽입
-            input[j + 1] = key;
+        LinkedList<Integer> q = new LinkedList();
+        for(int i = 0 ; i < S ; i++) {
+            q.add(0);
         }
-
+        for(int i = 0 ; i < N ; i++) {
+            // 1. 해야할 작업이 캐시에 없는 상태 -> 마지막꺼 없애고, 맨앞에 새로운 작업 추가
+            if(!q.contains(input[i])) {
+                q.addFirst(input[i]);
+                q.removeLast();
+            }
+            // 2. 해야할 작업이 캐시에 있는 경우 -> 해당 작업 빼서 맨 앞에 추가
+            else {
+                q.remove(q.indexOf(input[i]));
+                q.addFirst(input[i]);
+            }
+        }
         StringBuilder sb = new StringBuilder();
-        for(int n : input) {
+        for(int n : q) {
             sb.append(n).append(" ");
         }
         System.out.println(sb);

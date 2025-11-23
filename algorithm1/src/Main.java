@@ -13,15 +13,20 @@ public class Main {
             input[i] = Integer.parseInt(inputArr[i]);
         }
 
-        for(int i = 0 ; i < N ; i++) {
-            for(int j = 0 ; j < N-1 ; j++) {
-                if(input[j] > input[j+1]) {
-                    int temp = input[j];
-                    input[j] = input[j+1];
-                    input[j+1] = temp;
-                }
+        for (int i = 1; i < N; i++) {
+            int key = input[i];     // 끼워 넣을 값
+            int j = i - 1;
+
+            // key보다 큰 값들은 오른쪽으로 이동
+            while (j >= 0 && input[j] > key) {
+                input[j + 1] = input[j];
+                j--;
             }
+
+            // key를 제자리 삽입
+            input[j + 1] = key;
         }
+
         StringBuilder sb = new StringBuilder();
         for(int n : input) {
             sb.append(n).append(" ");

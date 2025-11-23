@@ -14,13 +14,13 @@ public class Main {
         }
 
         for(int i = 0 ; i < N ; i++) {
-            int minIndex = i;
-            for(int j = i+1 ; j < N ; j++) {
-                if(input[j] < input[minIndex]) minIndex = j;
+            for(int j = 0 ; j < N-1 ; j++) {
+                if(input[j] > input[j+1]) {
+                    int temp = input[j];
+                    input[j] = input[j+1];
+                    input[j+1] = temp;
+                }
             }
-            int temp = input[i];
-            input[i] = input[minIndex];
-            input[minIndex] = temp;
         }
         StringBuilder sb = new StringBuilder();
         for(int n : input) {

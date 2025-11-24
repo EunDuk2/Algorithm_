@@ -8,12 +8,17 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         String[] inputArr = br.readLine().split(" ");
-        Set<Integer> set = new HashSet();
+        int[] input = new int[N];
         for(int i = 0 ; i < N ; i++) {
-            set.add(Integer.parseInt(inputArr[i]));
+            input[i] = Integer.parseInt(inputArr[i]);
         }
+        int[] sorted = input.clone();
+        Arrays.sort(sorted);
 
-        if(set.size() == N) System.out.println("U");
-        else System.out.println("D");
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < N ; i++) {
+            if(input[i] != sorted[i]) sb.append(i+1).append(" ");
+        }
+        System.out.println(sb);
     }
 }

@@ -6,26 +6,24 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        long[] x = new long[N+1];
-        long[] y = new long[N+1];
 
-        for(int i=0; i<N; i++){
-            String[] arr = br.readLine().split(" ");
-            x[i] = Long.parseLong(arr[0]);
-            y[i] = Long.parseLong(arr[1]);
+        List<int[]> list = new ArrayList();
+        for(int i = 0 ; i < N ; i++) {
+            String[] input = br.readLine().split(" ");
+            list.add(new int[2]);
+            list.get(i)[0] = Integer.parseInt(input[0]);
+            list.get(i)[1] = Integer.parseInt(input[1]);
         }
 
-        // 마지막 점은 다시 처음으로 연결
-        x[N] = x[0];
-        y[N] = y[0];
+        list.sort((a, b) -> {
+           int compare1 = a[0] - b[0];
+           if(compare1 != 0) return compare1;
+           int compare2 = a[1] - b[1];
+           return compare2;
+        });
 
-        long sum = 0;
-        for(int i=0; i<N; i++){
-            sum += x[i] * y[i+1] - y[i] * x[i+1];
+        for(int[] n : list) {
+            System.out.println(n[0] + " " + n[1]);
         }
-
-        double area = Math.abs(sum) / 2.0;
-
-        System.out.printf("%.1f", area);
     }
 }

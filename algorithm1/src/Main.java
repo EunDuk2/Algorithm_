@@ -5,43 +5,27 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int M = Integer.parseInt(NM[1]);
+        // (는 스택에 넣고
+        // )는 스택에 (로 제거하고, 스택에 (가 없으면 count++
+        // 끝나고는 스택에 남은 ( 개수 count++
 
-        String[] input = br.readLine().split(" ");
+        char[] input = br.readLine().toCharArray();
 
-        int[] arr = new int[N];
-        for(int i = 0 ; i < N ; i++) {
-            arr[i] = Integer.parseInt(input[i]);
-        }
-
-        int lt = Arrays.stream(arr).max().getAsInt();
-        int rt = Arrays.stream(arr).sum();
-        int answer = 0;
-        while(lt <= rt) {
-            int mid = (lt+rt) / 2;
-            if(count(arr, mid) <= M) {
-                answer = mid;
-                rt = mid-1;
+        int count = 0;
+        Stack<Character> stack = new Stack();
+        for(char c : input) {
+            if(c == '(') {
+                stack.push(c);
             } else {
-                lt = mid+1;
+                if(!stack.isEmpty()) {
+                    stack.pop();
+                } else {
+                    count++;
+                }
             }
         }
-        System.out.println(answer);
-    }
-    // 배열이랑 용량받고, 몇 개 필요한지 반환
-    static int count(int[] arr, int capa) {
-        int count = 1;
-        int sum = 0;
-        for(int n : arr) {
-            if(sum+n > capa) {
-                count++;
-                sum = n;
-            } else {
-                sum += n;
-            }
-        }
-        return count;
+        count += stack.size();
+
+        System.out.println(count);
     }
 }

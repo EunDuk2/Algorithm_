@@ -15,34 +15,31 @@ public class Main {
         for(int i = 0 ; i < N ; i++) {
             arr[i] = Integer.parseInt(input[i]);
         }
+        Arrays.sort(arr);
 
-        int lt = Arrays.stream(arr).max().getAsInt();
-        int rt = Arrays.stream(arr).sum();
         int answer = 0;
+        int lt = 1;
+        int rt = arr[N-1] - arr[0];
         while(lt <= rt) {
-            // count가 M보다 크면 mid가 큰 것임
-            int mid = (lt+rt) / 2;
-            int count = count(arr, mid);
-            if(count > M) {
+            int mid = (lt + rt) / 2;
+            if(isPossible(arr, mid, M)) {
+                answer = mid;
                 lt = mid+1;
             } else {
-                answer = mid;
                 rt = mid-1;
             }
         }
         System.out.println(answer);
     }
-    static int count(int[] arr, int capacity) {
-        // capacity에 넣을 때, 최대 몇 세트가 나오는지 반환
-        int sum = 0;
+    static boolean isPossible(int[] arr, int distance, int size) {
+        int lt = 0;
         int count = 1;
-        for(int i = 0 ; i < arr.length ; i++) {
-            sum += arr[i];
-            if(sum > capacity) {
-                sum = arr[i];
+        for(int rt = 1; rt < arr.length ; rt++) {
+            if(arr[rt]-arr[lt] >= distance) {
+                lt = rt;
                 count++;
             }
         }
-        return count;
+        return count >= size ? true : false;
     }
 }

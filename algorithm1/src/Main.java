@@ -15,17 +15,19 @@ public class Main {
             numbers[i] = Integer.parseInt(input[i]);
         }
 
-        int max = Integer.MIN_VALUE;
-        int sum = 0;
         int lt = 0;
-
+        int k = 0;
+        int maxLength = 0;
         for(int rt = 0 ; rt < N ; rt++) {
-            sum += numbers[rt];
-            if((rt-lt+1) == K) {
-                max = Math.max(max, sum);
-                sum -= numbers[lt++];
+            if(numbers[rt] == 0) {
+                k++;
+                while(k>K) {
+                    if(numbers[lt] == 0) k--;
+                    lt++;
+                }
             }
+            maxLength = Math.max(maxLength, (rt-lt+1));
         }
-        System.out.println(max);
+        System.out.println(maxLength);
     }
 }

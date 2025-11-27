@@ -9,11 +9,9 @@ public class Main {
         int N = Integer.parseInt(NM[0]);
         int M = Integer.parseInt(NM[1]);
 
-        String[] input = br.readLine().split(" ");
-
         int[] arr = new int[N];
         for(int i = 0 ; i < N ; i++) {
-            arr[i] = Integer.parseInt(input[i]);
+            arr[i] = Integer.parseInt(br.readLine());
         }
         Arrays.sort(arr);
 

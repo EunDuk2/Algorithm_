@@ -5,35 +5,44 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NKB = br.readLine().split(" ");
-        int N = Integer.parseInt(NKB[0]);
-        int K = Integer.parseInt(NKB[1]);
-        int B = Integer.parseInt(NKB[2]);
+        String[] NM = br.readLine().split(" ");
+        int N = Integer.parseInt(NM[0]);
+        int M = Integer.parseInt(NM[1]);
 
-        int[] numbers = new int[N];
-        for(int i = 0 ; i < B ; i++) {
-            int index = Integer.parseInt(br.readLine())-1;
-            numbers[index] = 1;
+        String[] input = br.readLine().split(" ");
+
+        int[] arr = new int[N];
+        for(int i = 0 ; i < N ; i++) {
+            arr[i] = Integer.parseInt(input[i]);
         }
 
-        int answer = -1;
-        question: for(int i = 0 ; i <= B ; i++) {
-            int lt = 0;
-            int currentK = 0;
-            for(int rt = 0 ; rt < N ; rt++) {
-                if(numbers[rt] == 1) {
-                    currentK++;
-                    while(currentK > i) {
-                        if(numbers[lt] == 1) currentK--;
-                        lt++;
-                    }
-                }
-                if((rt-lt+1) == K) {
-                    answer = i;
-                    break question;
-                }
+        int lt = Arrays.stream(arr).max().getAsInt();
+        int rt = Arrays.stream(arr).sum();
+        int answer = 0;
+        while(lt <= rt) {
+            // count가 M보다 크면 mid가 큰 것임
+            int mid = (lt+rt) / 2;
+            int count = count(arr, mid);
+            if(count > M) {
+                lt = mid+1;
+            } else {
+                answer = mid;
+                rt = mid-1;
             }
         }
         System.out.println(answer);
+    }
+    static int count(int[] arr, int capacity) {
+        // capacity에 넣을 때, 최대 몇 세트가 나오는지 반환
+        int sum = 0;
+        int count = 1;
+        for(int i = 0 ; i < arr.length ; i++) {
+            sum += arr[i];
+            if(sum > capacity) {
+                sum = arr[i];
+                count++;
+            }
+        }
+        return count;
     }
 }

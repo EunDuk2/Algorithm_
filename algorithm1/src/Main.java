@@ -5,39 +5,38 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NM = br.readLine().split(" ");
-        int N = Integer.parseInt(NM[0]);
-        int M = Integer.parseInt(NM[1]);
+        String str = br.readLine();
+        int M = Integer.parseInt(br.readLine());
 
-        int[] arr = new int[N];
-        for(int i = 0 ; i < N ; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        Arrays.sort(arr);
+        Stack<Character> left = new Stack<>();
+        Stack<Character> right = new Stack<>();
 
-        int answer = 0;
-        int lt = 1;
-        int rt = arr[N-1] - arr[0];
-        while(lt <= rt) {
-            int mid = (lt + rt) / 2;
-            if(isPossible(arr, mid, M)) {
-                answer = mid;
-                lt = mid+1;
-            } else {
-                rt = mid-1;
+        for (char c : str.toCharArray()) left.push(c);
+
+        while (M-- > 0) {
+            String cmd = br.readLine();
+            switch (cmd.charAt(0)) {
+                case 'L':
+                    if (!left.isEmpty()) right.push(left.pop());
+                    break;
+
+                case 'D':
+                    if (!right.isEmpty()) left.push(right.pop());
+                    break;
+
+                case 'B':
+                    if (!left.isEmpty()) left.pop();
+                    break;
+
+                case 'P':
+                    left.push(cmd.charAt(2));
+                    break;
             }
         }
-        System.out.println(answer);
-    }
-    static boolean isPossible(int[] arr, int distance, int size) {
-        int lt = 0;
-        int count = 1;
-        for(int rt = 1; rt < arr.length ; rt++) {
-            if(arr[rt]-arr[lt] >= distance) {
-                lt = rt;
-                count++;
-            }
-        }
-        return count >= size ? true : false;
+
+        StringBuilder sb = new StringBuilder();
+        for (char c : left) sb.append(c);
+        while (!right.isEmpty()) sb.append(right.pop());
+        System.out.println(sb);
     }
 }

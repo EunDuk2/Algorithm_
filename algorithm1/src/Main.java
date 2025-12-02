@@ -2,39 +2,29 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static int S;
-    static int[] numbers;
-    static int sum;
-    static int count = 0;
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NS = br.readLine().split(" ");
-        N = Integer.parseInt(NS[0]);
-        S = Integer.parseInt(NS[1]);
-
+        int N = Integer.parseInt(br.readLine());
         String[] input = br.readLine().split(" ");
-        numbers = new int[N];
+        int K = Integer.parseInt(br.readLine());
+
+        int[] numbers = new int[N];
         for(int i = 0 ; i < N ; i++) {
             numbers[i] = Integer.parseInt(input[i]);
         }
 
-        dfs(0);
-
+        long count = 0;
+        long sum = 0;
+        int lt = 0;
+        for(int rt = 0 ; rt < N ; rt++) {
+            sum += numbers[rt];
+            while(sum > K) {
+                count += N-rt;
+                sum -= numbers[lt];
+                lt++;
+            }
+        }
         System.out.println(count);
-    }
-    static void dfs(int start) {
-        if(start == N) {
-
-            return;
-        }
-        for(int i = start ; i < N ; i++) {
-            sum += numbers[i];
-            if(sum == S) count++;
-            dfs(i+1);
-            sum -= numbers[i];
-        }
     }
 }

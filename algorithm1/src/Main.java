@@ -2,54 +2,21 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static List<List<Integer>> doubleList = new ArrayList();
-    static int N, M, V;
-    static boolean[] visited;
-    static StringBuilder sb = new StringBuilder();
+    static int S, E;
+    static int[] dist = new int[10001];
+    static boolean[] visited = new boolean[10001];
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] NMV = br.readLine().split(" ");
-        N = Integer.parseInt(NMV[0]);
-        M = Integer.parseInt(NMV[1]);
-        V = Integer.parseInt(NMV[2]);
+        String[] SE = br.readLine().split(" ");
+        S = Integer.parseInt(SE[0]);
+        E = Integer.parseInt(SE[1]);
 
-        visited = new boolean[N+1];
+        bfs(S);
 
-        for(int i = 0 ; i < N+1 ; i++) {
-            doubleList.add(new ArrayList());
-        }
+        System.out.println(dist[E]);
 
-        for(int i = 0 ; i < M ; i++) {
-            String[] input = br.readLine().split(" ");
-            int a = Integer.parseInt(input[0]);
-            int b = Integer.parseInt(input[1]);
-
-            doubleList.get(a).add(b);
-            doubleList.get(b).add(a);
-        }
-
-        for(List<Integer> list : doubleList) {
-            list.sort(Comparator.naturalOrder());
-        }
-
-        dfs(V);
-
-        visited = new boolean[N+1];
-        sb.append("\n");
-        bfs(V);
-
-        System.out.println(sb);
-
-    }
-    static void dfs(int start) {
-        visited[start] = true;
-        sb.append(start).append(" ");
-
-        for(int n : doubleList.get(start)) {
-            if(!visited[n]) dfs(n);
-        }
     }
     static void bfs(int start) {
         Queue<Integer> q = new LinkedList();
@@ -58,12 +25,18 @@ public class Main {
 
         while(!q.isEmpty()) {
             int current = q.poll();
-            sb.append(current).append(" ");
 
-            for(int n : doubleList.get(current)) {
-                if(!visited[n]) {
-                    q.add(n);
-                    visited[n] = true;
+            if(current == E) return;
+
+            int[] next = {current+1, current-1, current+5};
+
+            for(int n : next) {
+                if(n > 0 && n < dist.length-1) {
+                    if(!visited[n]) {
+                        q.add(n);
+                        visited[n] = true;
+                        dist[n] = dist[current]+1;
+                    }
                 }
             }
         }

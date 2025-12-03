@@ -2,21 +2,48 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int S, E;
-    static int[] dist = new int[10001];
-    static boolean[] visited = new boolean[10001];
+    static int N, M;
+    static List<List<Integer>> doubleList = new ArrayList();
+    static int[] dist;
+    static boolean[] visited;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] SE = br.readLine().split(" ");
-        S = Integer.parseInt(SE[0]);
-        E = Integer.parseInt(SE[1]);
+        String[] NM = br.readLine().split(" ");
+        N = Integer.parseInt(NM[0]);
+        M = Integer.parseInt(NM[1]);
 
-        bfs(S);
+        dist = new int[N+1];
+        visited = new boolean[N+1];
 
-        System.out.println(dist[E]);
+        for(int i = 0 ; i < N+1 ; i++) {
+            doubleList.add(new ArrayList());
+        }
+        for(int i = 0 ; i < M ; i++) {
+            String[] input = br.readLine().split(" ");
+            int a = Integer.parseInt(input[0]);
+            int b = Integer.parseInt(input[1]);
+            doubleList.get(a).add(b);
+            doubleList.get(a).sort(Comparator.naturalOrder());
+            doubleList.get(b).add(a);
+            doubleList.get(b).sort(Comparator.naturalOrder());
+        }
 
+
+        bfs(1);
+
+        int max = Arrays.stream(dist).max().getAsInt();
+        int order = -1;
+        int count = 0;
+
+        for(int i = 0 ; i < dist.length ; i++) {
+            if(dist[i] == max) {
+                if(order == -1) order = i;
+                count++;
+            }
+        }
+        System.out.println(order + " " + max + " " + count);
     }
     static void bfs(int start) {
         Queue<Integer> q = new LinkedList();
@@ -25,18 +52,11 @@ public class Main {
 
         while(!q.isEmpty()) {
             int current = q.poll();
-
-            if(current == E) return;
-
-            int[] next = {current+1, current-1, current+5};
-
-            for(int n : next) {
-                if(n > 0 && n < dist.length-1) {
-                    if(!visited[n]) {
-                        q.add(n);
-                        visited[n] = true;
-                        dist[n] = dist[current]+1;
-                    }
+            for(int next : doubleList.get(current)) {
+                if(!visited[next]) {
+                    q.add(next);
+                    visited[next] = true;
+                    dist[next] = dist[current]+1;
                 }
             }
         }

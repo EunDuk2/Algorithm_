@@ -3,40 +3,59 @@ import java.util.*;
 
 public class Main {
     static int N;
-    static int[] numbers;
-    static int[] sums;
-    static int sum = 0;
-
+    static int[][] graph;
+    static List<List<Integer>> doubleList = new ArrayList();
+    static boolean[] visited;
+    
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
-        numbers = new int[N];
-        String[] input = br.readLine().split(" ");
+        graph = new int[N][N];
+
         for(int i = 0 ; i < N ; i++) {
-            numbers[i] = Integer.parseInt(input[i]);
+            doubleList.add(new ArrayList());
         }
-        int max = Arrays.stream(numbers).sum();
-        sums = new int[max+1];
 
-        dfs(0);
-
-        int answer = max+1;
-        for(int i = 1 ; i < sums.length ; i++) {
-            if(sums[i] == 0) {
-                answer = i;
-                break;
+        for(int i = 0 ; i < N ; i++) {
+            String[] input = br.readLine().split(" ");
+            for(int j = 0 ; j < input.length ; j++) {
+                int n = Integer.parseInt(input[j]);
+                graph[i][j] = Integer.parseInt(input[j]);
+                if(n == 1) {
+                    doubleList.get(i).add(j);
+                }
             }
         }
-        System.out.println(answer);
-    }
 
-    static void dfs(int start) {
-        for(int i = start ; i < N ; i++) {
-            sum += numbers[i];
-            sums[sum] = 1;
-            dfs(i+1);
-            sum -= numbers[i];
+        for(int i = 0 ; i < N ; i++) {
+            for(int j = 0 ; j < N ; j++) {
+                visited = new boolean[N];
+                bfs(i, j);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(int[] arr : graph) {
+            for(int n : arr) {
+                sb.append(n).append(" ");
+            }
+            sb.append("\n");
+        }
+        System.out.println(sb);
+    }
+    static void bfs(int start, int goal) {
+        Queue<Integer> q = new LinkedList();
+        q.add(start);
+        while(!q.isEmpty()) {
+            int current = q.poll();
+            for(int next : doubleList.get(current)) {
+                if(!visited[next]) {
+                    q.add(next);
+                    visited[next] = true;
+                    graph[start][next] = 1;
+                }
+            }
         }
     }
 }

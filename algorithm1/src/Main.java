@@ -2,58 +2,63 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static int[][] graph;
-    static List<List<Integer>> doubleList = new ArrayList();
-    static boolean[] visited;
-    
+    static int V, E, K;
+    static List<List<int[]>> graph = new ArrayList<>();
+    static int[] dist;
+    static final int INF = Integer.MAX_VALUE;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        N = Integer.parseInt(br.readLine());
-        graph = new int[N][N];
+        String[] VE = br.readLine().split(" ");
+        V = Integer.parseInt(VE[0]);
+        E = Integer.parseInt(VE[1]);
+        K = Integer.parseInt(br.readLine());
 
-        for(int i = 0 ; i < N ; i++) {
-            doubleList.add(new ArrayList());
+        for (int i = 0; i <= V; i++) {
+            graph.add(new ArrayList<>());
         }
 
-        for(int i = 0 ; i < N ; i++) {
-            String[] input = br.readLine().split(" ");
-            for(int j = 0 ; j < input.length ; j++) {
-                int n = Integer.parseInt(input[j]);
-                graph[i][j] = Integer.parseInt(input[j]);
-                if(n == 1) {
-                    doubleList.get(i).add(j);
-                }
-            }
+        dist = new int[V+1];
+        Arrays.fill(dist, INF);
+
+        for (int i = 0; i < E; i++) {
+            String[] uvw = br.readLine().split(" ");
+            int u = Integer.parseInt(uvw[0]);
+            int v = Integer.parseInt(uvw[1]);
+            int w = Integer.parseInt(uvw[2]);
+
+            graph.get(u).add(new int[]{v, w});
         }
 
-        for(int i = 0 ; i < N ; i++) {
-            for(int j = 0 ; j < N ; j++) {
-                visited = new boolean[N];
-                bfs(i, j);
-            }
-        }
+        dijkstra(K);
 
         StringBuilder sb = new StringBuilder();
-        for(int[] arr : graph) {
-            for(int n : arr) {
-                sb.append(n).append(" ");
-            }
-            sb.append("\n");
+        for (int i = 1; i <= V; i++) {
+            if (dist[i] == INF) sb.append("INF\n");
+            else sb.append(dist[i]).append("\n");
         }
         System.out.println(sb);
     }
-    static void bfs(int start, int goal) {
-        Queue<Integer> q = new LinkedList();
-        q.add(start);
-        while(!q.isEmpty()) {
-            int current = q.poll();
-            for(int next : doubleList.get(current)) {
-                if(!visited[next]) {
-                    q.add(next);
-                    visited[next] = true;
-                    graph[start][next] = 1;
+    static void dijkstra(int start) {
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        dist[start] = 0;
+        pq.add(new int[]{start, 0});
+
+        while(!pq.isEmpty()) {
+            int[] currentArr = pq.poll();
+            int current = currentArr[0];
+            int currentCost = currentArr[1];
+
+            if(currentCost > dist[current]) continue;
+
+            for(int[] nextArr : graph.get(current)) {
+                int next = nextArr[0];
+                int nextCost = nextArr[1];
+
+                if(dist[next] > dist[current] + nextCost) {
+                    dist[next] = dist[current] + nextCost;
+                    pq.add(new int[]{next, dist[next]});
                 }
             }
         }

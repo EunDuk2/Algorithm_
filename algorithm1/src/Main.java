@@ -2,63 +2,58 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int V, E, K;
-    static List<List<int[]>> graph = new ArrayList<>();
-    static int[] dist;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
+    static int N;
+    static int[][] graph;
+    static int[][] dist;
     static final int INF = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] VE = br.readLine().split(" ");
-        V = Integer.parseInt(VE[0]);
-        E = Integer.parseInt(VE[1]);
-        K = Integer.parseInt(br.readLine());
+        int count = 1;
+        while(true) {
+            N = Integer.parseInt(br.readLine());
+            if(N == 0) break;
 
-        for (int i = 0; i <= V; i++) {
-            graph.add(new ArrayList<>());
+            graph = new int[N][N];
+            dist = new int[N][N];
+            for(int[] d : dist) {
+                Arrays.fill(d, INF);
+            }
+
+            for(int i = 0 ; i < N ; i++) {
+                String[] input = br.readLine().split(" ");
+
+                for(int j = 0 ; j < N ; j++) {
+                    graph[i][j] = Integer.parseInt(input[j]);
+                }
+            }
+
+            dijkstra(0, 0);
+            System.out.println("Problem " + count++ + ": " + dist[N-1][N-1]);
         }
-
-        dist = new int[V+1];
-        Arrays.fill(dist, INF);
-
-        for (int i = 0; i < E; i++) {
-            String[] uvw = br.readLine().split(" ");
-            int u = Integer.parseInt(uvw[0]);
-            int v = Integer.parseInt(uvw[1]);
-            int w = Integer.parseInt(uvw[2]);
-
-            graph.get(u).add(new int[]{v, w});
-        }
-
-        dijkstra(K);
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= V; i++) {
-            if (dist[i] == INF) sb.append("INF\n");
-            else sb.append(dist[i]).append("\n");
-        }
-        System.out.println(sb);
     }
-    static void dijkstra(int start) {
-        Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        dist[start] = 0;
-        pq.add(new int[]{start, 0});
+    static void dijkstra(int x, int y) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> graph[a[0]][a[1]] - graph[b[0]][b[1]]);
+        pq.add(new int[]{x, y});
+        dist[x][y] = graph[x][y];
 
         while(!pq.isEmpty()) {
-            int[] currentArr = pq.poll();
-            int current = currentArr[0];
-            int currentCost = currentArr[1];
+            int[] current = pq.poll();
+            int cx = current[0];
+            int cy = current[1];
 
-            if(currentCost > dist[current]) continue;
+            for(int i = 0 ; i < 4 ; i++) {
+                int nx = cx + dx[i];
+                int ny = cy + dy[i];
 
-            for(int[] nextArr : graph.get(current)) {
-                int next = nextArr[0];
-                int nextCost = nextArr[1];
-
-                if(dist[next] > dist[current] + nextCost) {
-                    dist[next] = dist[current] + nextCost;
-                    pq.add(new int[]{next, dist[next]});
+                if(nx > -1 && nx < N && ny > -1 && ny < N) {
+                    if(dist[nx][ny] > dist[cx][cy] + graph[nx][ny]) {
+                        pq.add(new int[]{nx, ny});
+                        dist[nx][ny] = dist[cx][cy] + graph[nx][ny];
+                    }
                 }
             }
         }
